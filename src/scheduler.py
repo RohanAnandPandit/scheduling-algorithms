@@ -38,6 +38,12 @@ class Scheduler:
 
         return self.schedule_jobs(jobs)
 
+    def weighted_shortest_processing_time(self, jobs: JobList):
+        jobs.sort(
+            key=lambda j: (j.get_processing_time() / j.get_weight(), j.index))
+
+        return self.schedule_jobs(jobs)
+
     def longest_processing_time(self, jobs: JobList) -> Schedule:
         jobs.sort(key=lambda j: (-j.get_processing_time(), j.index))
 
