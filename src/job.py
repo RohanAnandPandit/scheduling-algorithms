@@ -51,6 +51,11 @@ class Job:
     def __repr__(self):
         return f'({self.index})'
 
+    def __eq__(self, other):
+        return (self.index == other.index and
+                self.processing_time == other.processing_time and
+                self.completion_time == other.completion_time)
+
 
 class Idle(Job):
     def __init__(self, time: int):
