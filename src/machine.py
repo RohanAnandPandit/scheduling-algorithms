@@ -60,4 +60,3 @@ class Machine:
             jobs[i], jobs[j] = jobs[j], jobs[i]
 
         return Machine(self.index, jobs=jobs)
-
