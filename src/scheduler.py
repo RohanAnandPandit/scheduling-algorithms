@@ -1,3 +1,4 @@
+import heapq
 from math import ceil
 from enum import Enum
 from schedule import Schedule
@@ -89,3 +90,24 @@ class Scheduler:
             t += 1
 
         return self.schedule
+
+    def moore_hodgson(self, jobs: JobList):
+        jobs.sort(key=lambda j: j.get_due_date())
+        maxHeap = []
+        current = []
+        late = []
+        time = 0
+        for j in jobs:
+            current.append(j)
+            heapq.heappush(maxHeap, (-j.get_processing_time(), j.index, j))
+            time += j.get_processing_time()
+
+            if time > j.get_due_date():
+                _, _, longest_job = heapq.heappop(maxHeap)
+
+                late.append(longest_job)
+                current.remove(longest_job)
+                time -= longest_job.get_processing_time()
+
+        late.sort(key=lambda j: j.index)
+        return self.schedule_jobs(current + late)
