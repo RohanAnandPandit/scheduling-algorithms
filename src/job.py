@@ -14,6 +14,9 @@ class Job:
     def get_processing_time(self):
         return self.processing_time
 
+    def get_weight(self):
+        return self.weight
+
     def get_due_date(self):
         return self.due_date
 
