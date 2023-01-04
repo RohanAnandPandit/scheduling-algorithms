@@ -77,6 +77,8 @@ class Schedule:
 
     def plot(self, fname):
         fig, gnt = plt.subplots()
+        # fig.set_figheight(20)
+        fig.set_figwidth(9)
         gap_y = 10
         gap_x = 1
         # Setting Y-axis limits
@@ -96,6 +98,8 @@ class Schedule:
         gnt.set_yticklabels(
             [f'M{str(i + 1)}' for i in range(self.available_machines())][::-1])
         gnt.set_xticks([gap_x * i for i in range(self.makespan() + 1)])
+        gnt.set_xticklabels(
+            [str(i) for i in range(self.makespan() + 1)])
         # Setting graph attribute
         # gnt.grid(True)
         bar_height = 10
@@ -106,7 +110,7 @@ class Schedule:
                 y = (self.available_machines() - i) * gap_y - int(
                     (bar_height - 2) / 2)
                 if not j.is_idle():
-                    gnt.broken_barh([(curr, j.get_processing_time())],
+                    gnt.broken_barh([(curr, gap_x * j.get_processing_time())],
                                     (y, bar_height - 2),
                                     facecolors=self.job_colour[j.index],
                                     edgecolor='black')
@@ -131,3 +135,6 @@ class Schedule:
                 else:
                     self.add_job(Job(j.index, rem), machine_index=machine.index)
                     jobs.insert(0, Job(j.index, j.processing_time - rem))
+
+    def get_jobs(self):
+        return list(map(lambda m: m.get_jobs(), self.machines))
