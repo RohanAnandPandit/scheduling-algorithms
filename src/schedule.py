@@ -136,29 +136,30 @@ class Schedule:
 
         plt.savefig(f"{fname}.png", dpi=300)
 
-    def schedule_preemptively(self, jobs: JobList, makespan: int):
+    def schedule_preemptively(self, jobs: JobList, max_makespan: int):
         """
         Preemptive schedules jobs with up to the given limit for makespan
         before moving on to the next machine
         :param jobs:
-        :param makespan:
+        :param max_makespan:
         :return:
         """
         for machine in self.machines:
             if not jobs:
                 break
-            while machine.get_makespan() < makespan:
+            while machine.get_makespan() < max_makespan:
                 if not jobs:
                     break
 
                 j = jobs.pop(0)
-                rem = makespan - machine.get_makespan()
+                rem = max_makespan - machine.get_makespan()
 
-                if rem >= j.processing_time:
+                if rem >= j.get_processing_time():
                     self.add_job(j, machine_index=machine.index)
                 else:
-                    self.add_job(Job(j.index, rem), machine_index=machine.index)
-                    jobs.insert(0, Job(j.index, j.processing_time - rem))
+                    self.add_job(j.get_slice(rem), machine_index=machine.index)
+                    jobs.insert(0, Job(j.index, j.get_slice(
+                        j.get_processing_time() - rem)))
 
     def get_jobs(self):
         return list(map(lambda m: m.get_jobs(), self.machines))
