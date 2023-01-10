@@ -10,6 +10,16 @@ def simulated_annealing(*, initial_schedule: Machine,
                         temperature: int,
                         cooling_rate: float, iterations: int,
                         cost_function: Callable[[Machine], int]) -> Schedule:
+    """
+    Probabilistically selects neighbours to find the global optimum for the
+    given cost function
+    :param initial_schedule:
+    :param temperature:
+    :param cooling_rate:
+    :param iterations:
+    :param cost_function:
+    :return:
+    """
     assert 0 < cooling_rate < 1
     assert iterations >= 0
 
@@ -41,6 +51,16 @@ def simulated_annealing(*, initial_schedule: Machine,
 def tabu_search(*, initial_schedule: Machine, tabu_list_size: int,
                 threshold: int, iterations: int,
                 cost_function: Callable[[Machine], int]):
+    """
+    A deterministic heuristic method for finding the global optimum schedule
+    for the cost function while tracking forbidden job swaps
+    :param initial_schedule:
+    :param tabu_list_size:
+    :param threshold:
+    :param iterations:
+    :param cost_function:
+    :return:
+    """
     assert tabu_list_size >= 0
     assert threshold > 0
 

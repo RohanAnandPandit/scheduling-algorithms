@@ -57,6 +57,11 @@ class Schedule:
         return min(self.machines, key=lambda m: m.get_makespan()).index
 
     def assign_colour(self, job: Job):
+        """
+        Generates a unique random colour for the given job
+        :param job:
+        :return:
+        """
         if job.index not in self.job_colour:
             r, g, b = randint(25, 75) / 100, randint(25, 75) / 100, \
                       randint(25, 75) / 100
@@ -66,6 +71,12 @@ class Schedule:
         self.add_job(Idle(time), machine_index)
 
     def add_job(self, job: Job, machine_index: int = 0):
+        """
+        Adds job to the machine at the given index
+        :param job:
+        :param machine_index:
+        :return:
+        """
         self.assign_colour(job)
 
         machine = self.machines[machine_index]
@@ -76,6 +87,12 @@ class Schedule:
         return self
 
     def plot(self, fname):
+        """
+        Creates and saves the gantt chart for the schedule with the given
+        file name
+        :param fname:
+        :return:
+        """
         fig, gnt = plt.subplots()
         # fig.set_figheight(20)
         fig.set_figwidth(9)
@@ -120,6 +137,13 @@ class Schedule:
         plt.savefig(f"{fname}.png", dpi=300)
 
     def schedule_preemptively(self, jobs: JobList, makespan: int):
+        """
+        Preemptive schedules jobs with up to the given limit for makespan
+        before moving on to the next machine
+        :param jobs:
+        :param makespan:
+        :return:
+        """
         for machine in self.machines:
             if not jobs:
                 break

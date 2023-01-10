@@ -34,6 +34,12 @@ class Scheduler:
         return self.current_machine
 
     def shortest_processing_time(self, jobs: JobList):
+        """
+        Schedules in ascending order of the processing times
+        Minimises total completion times for non-preemptive jobs
+        :param jobs:
+        :return:
+        """
         jobs.sort(key=lambda j: (j.get_processing_time(), j.index))
 
         return self.schedule_jobs(jobs)
@@ -45,13 +51,22 @@ class Scheduler:
         return self.schedule_jobs(jobs)
 
     def longest_processing_time(self, jobs: JobList) -> Schedule:
+        """
+        Schedules jobs in descending order of their processing times.
+        Used to reduce makespan for non-preemptive jobs parallel machines.
+        :param jobs: list of jobs
+        :return:
+        """
         jobs.sort(key=lambda j: (-j.get_processing_time(), j.index))
 
         return self.schedule_jobs(jobs)
 
     def wrap_around_rule(self, jobs: JobList) -> Schedule:
-        # McNaughton's rule
-
+        """
+        Schedules jobs preemptively to minimise makespan
+        :param jobs: list of jobs
+        :return: current Schedule
+        """
         processing_times = list(map(lambda j: j.get_processing_time(), jobs))
         longest_job = max(processing_times)
         makespan = max(longest_job,
@@ -62,17 +77,32 @@ class Scheduler:
         return self.schedule
 
     def earliest_due_date(self, jobs: JobList):
+        """
+        Schedules jobs in order of their due dates
+        :param jobs:
+        :return: current schedule
+        """
         jobs.sort(key=lambda j: (j.get_due_date(), j.index))
 
         return self.schedule_jobs(jobs)
 
     def schedule_jobs(self, jobs: JobList):
+        """
+        Adds jobs to schedule at the required machine
+        :param jobs:
+        :return:
+        """
         while jobs:
             self.schedule.add_job(jobs.pop(0), self.get_current_machine())
 
         return self.schedule
 
     def shortest_remaining_processing_time(self, jobs: JobList):
+        """
+        Minimises total completion time for preemptive jobs with release times
+        :param jobs:
+        :return:
+        """
         jobs.sort(key=lambda j: j.get_release_time())
         pending_jobs = []
         t = 0
@@ -98,6 +128,11 @@ class Scheduler:
         return self.schedule
 
     def moore_hodgson(self, jobs: JobList):
+        """
+        Minimises the total number of late jobs
+        :param jobs: list of jobs
+        :return: current schedule
+        """
         jobs.sort(key=lambda j: j.get_due_date())
         maxHeap = []
         current = []
@@ -116,4 +151,5 @@ class Scheduler:
                 time -= longest_job.get_processing_time()
 
         late.sort(key=lambda j: j.index)
+
         return self.schedule_jobs(current + late)
