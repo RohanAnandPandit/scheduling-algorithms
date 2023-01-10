@@ -17,3 +17,5 @@ Then you can add jobs to a machine at a specific index or the first available ma
 ### Using the Scheduler
 A Scheduler object has an internal Schedule. 
 When you use an algorithm for a list of jobs, the corresponding method returns the schedule.
+
+*NB: The algorithm will only give the optimal schedule for the job characteristics it was defined for*
